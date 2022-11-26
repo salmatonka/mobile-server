@@ -19,33 +19,60 @@ app.use(express.json());
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.ycofkd3.mongodb.net/?retryWrites=true&w=majority`;
 // console.log(uri);
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
-client.connect(err => {
-  const collection = client.db("test").collection("devices");
-  // perform actions on the collection object
-  client.close();
-});
+
+// function
+ async function run(){
+
+    try{
+       const mobileCategoriesCollection = client.db('mobilePhoneCategory').collection('categories');
+       const mobileDetailsCollection = client.db('mobilePhoneCategory').collection('brands');
 
 
+   //3data
+   app.get('/categories', async(req,res)=>{
+    const query = {};
+    const cursor = mobileCategoriesCollection.find(query);
+    const categories = await cursor.toArray();
+    res.send(categories);
+   })
 
+     //6data   
+       app.get('/brands',async(req,res)=>{
+        // const id=req.params.id;
+        const query = {}
+        const cursor = mobileDetailsCollection.find(query)
+        const brands = await cursor.limit(6).toArray()
+        res.send(brands)
+     })
+    
 
-//function
-// async function run(){
+     
 
-//     try{
-//        const mobileCategoryCollection = client.db('mobileCategory').collection('');
+     app.get('/brands:id',async(req,res)=>{
+        const id = req.params.id;
+        const query = {id:parseInt(id)}
+        const cursor = mobileDetailsCollection.find(query);
+        const categoryBrands = await cursor.toArray();
+        res.send(categoryBrands)
 
-//        app.get('/categories', async(req,res)=>{
-//         const query = {};
-//         const categories = await mobileCategoryCollection.find(query).toArray();
-//         res.send(categories);
-//        })
-//     }
-//     finally{
+     })
+    //  app.get('/brands/:id',async(req,res)=>{
+    //     const id = req.params.id;
+    //     const selectedBrands = mobileDetailsCollection.find(b => b._id === id);
+    //     res.send(selectedBrands)
 
-//     }
-// }
+    //  })
 
-// run().catch(console.log);
+    
+
+       
+    }
+    finally{
+
+    }
+}
+
+run().catch(console.log);
 
 
 
