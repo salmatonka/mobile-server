@@ -1,6 +1,6 @@
 const express =require('express');
 const cors = require('cors');
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 
 require('dotenv').config();
 const app = express();
@@ -10,8 +10,7 @@ const port = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
-// console.log(process.env.DB_USER)
-// console.log(process.env.DB_PASSWORD)
+
 //mongodb
 
 
@@ -24,20 +23,22 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
  async function run(){
 
     try{
-       const mobileCategoriesCollection = client.db('mobilePhoneCategory').collection('categories');
-       const mobileDetailsCollection = client.db('mobilePhoneCategory').collection('brands');
+    
+       const mobileCategoriesCollection = client.db('mobilePhoneCategory').collection('categorys');
+       const mobileDetailsCollection = client.db('mobilePhoneCategory').collection('services');
+       const orderingsCollection = client.db('mobilePhoneCategory').collection('orderings');
 
 
    //3data
-   app.get('/categories', async(req,res)=>{
+   app.get('/categorys', async(req,res)=>{
     const query = {};
     const cursor = mobileCategoriesCollection.find(query);
-    const categories = await cursor.toArray();
-    res.send(categories);
+    const categorys = await cursor.toArray();
+    res.send(categorys);
    })
 
-     //6data   
-       app.get('/brands',async(req,res)=>{
+    //  6data   
+       app.get('/services',async(req,res)=>{
         // const id=req.params.id;
         const query = {}
         const cursor = mobileDetailsCollection.find(query)
@@ -45,27 +46,38 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
         res.send(brands)
      })
     
+     //my product
+     app.get('/orderings', async(req, res) =>{
 
-     
-
-     app.get('/brands:id',async(req,res)=>{
-        const id = req.params.id;
-        const query = {id:parseInt(id)}
-        const cursor = mobileDetailsCollection.find(query);
-        const categoryBrands = await cursor.toArray();
-        res.send(categoryBrands)
-
-     })
-    //  app.get('/brands/:id',async(req,res)=>{
-    //     const id = req.params.id;
-    //     const selectedBrands = mobileDetailsCollection.find(b => b._id === id);
-    //     res.send(selectedBrands)
-
-    //  })
-
+        const email = req.query.email;
+        const query = { email: email};
+        const orderings = await orderingsCollection.find(query).toArray();
+        res.send(orderings);
     
+    })
 
-       
+
+
+
+      //orderings 
+      app.post('/orderings', async(req, res) =>{
+         const ordering = req.body
+        //  console.log(ordering);
+        const query = {
+            phoneServices: ordering.phoneServices
+        }
+        const alreadyOrdered = await orderingsCollection.find(query).toArray();
+
+      if(alreadyOrdered.length){
+        const message = `already ordering on ${ordering.phoneServices}`
+        return res.send({acknowledged: false, message})
+      }
+         const result = await orderingsCollection.insertOne(ordering);
+         res.send(result);
+      })
+
+
+
     }
     finally{
 
