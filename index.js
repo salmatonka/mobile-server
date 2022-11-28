@@ -2,8 +2,10 @@ const express =require('express');
 const cors = require('cors');
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 
+const jwt = require('jsonwebtoken');
 require('dotenv').config();
 const app = express();
+
 const port = process.env.PORT || 5000;
 
 //middleware
@@ -27,6 +29,7 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
        const mobileCategoriesCollection = client.db('mobilePhoneCategory').collection('categorys');
        const mobileDetailsCollection = client.db('mobilePhoneCategory').collection('services');
        const orderingsCollection = client.db('mobilePhoneCategory').collection('orderings');
+       const usersCollection = client.db('mobilePhoneCategory').collection('users');
 
 
    //3data
@@ -49,21 +52,19 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
      //my product
      app.get('/orderings', async(req, res) =>{
 
-        const email = req.query.email;
-        const query = { email: email};
-        const orderings = await orderingsCollection.find(query).toArray();
-        res.send(orderings);
-    
-    })
-
-
+      const email = req.query.email;
+      // console.log(email)
+      const query = { email: email};
+      const orderings = await orderingsCollection.find(query).toArray();
+      res.send(orderings);
+})
 
 
       //orderings 
       app.post('/orderings', async(req, res) =>{
          const ordering = req.body
-        //  console.log(ordering);
-        const query = {
+          console.log(ordering);
+          const query = {
             phoneServices: ordering.phoneServices
         }
         const alreadyOrdered = await orderingsCollection.find(query).toArray();
@@ -74,6 +75,31 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
       }
          const result = await orderingsCollection.insertOne(ordering);
          res.send(result);
+      });
+
+    app.get('/jwt', async(req,res) =>{
+      const email = req.query.email;
+        // console.log(email)
+        const query = { email: email};
+        const user = await usersCollection.find(query);
+        
+        if(user){
+          const token = jwt.sign({email}, process.env.ACCESS_TOKEN,{expiresIn: '24h'})
+          return res.send({accessToken: token});
+        }
+
+
+          console.log(user);
+        res.status(403).send({accessToken: ''});
+    
+     })
+
+
+      app.post('/users',async(req,res) =>{
+          const user = req.body;
+          console.log(user);
+          const result = await usersCollection.insertOne(user);
+          res.send(result);
       })
 
 
