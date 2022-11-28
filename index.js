@@ -21,6 +21,25 @@ const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@clu
 // console.log(uri);
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 
+// token function
+   function verifyJWT(req,res,next){
+    console.log('token verify',req.headers.authorization);
+    const authHeader = req.headers.authorization;
+    if(!authHeader){
+      return res.status(401).send('unauthorized access');
+    }
+    const token = authHeader.split(' ')[1];
+
+    jwt.verify(token, process.env.ACCESS_TOKEN, function(err, decoded){
+      if(err){
+        
+        return res.status(403).send({message: 'access token'})
+      }
+      req.decoded = decoded;
+      next();
+    })
+   }
+
 // function
  async function run(){
 
@@ -50,10 +69,13 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
      })
     
      //my product
-     app.get('/orderings', async(req, res) =>{
-
+     app.get('/orderings', verifyJWT, async(req, res) =>{
       const email = req.query.email;
-      // console.log(email)
+      const decodedEmail = req.decoded.email;
+    if(email !== decodedEmail){
+       return res.status(403).send({message: 'access token'});
+    }
+
       const query = { email: email};
       const orderings = await orderingsCollection.find(query).toArray();
       res.send(orderings);
