@@ -1,6 +1,8 @@
 const express =require('express');
 const cors = require('cors');
-const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
+const { MongoClient, ServerApiVersion } = require('mongodb');
+
+const ObjectId = require('mongodb').ObjectId;
 
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
@@ -33,7 +35,7 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
     jwt.verify(token, process.env.ACCESS_TOKEN, function(err, decoded){
       if(err){
         
-        return res.status(403).send({message: 'access token'})
+        return res.status(403).send({message:'access token'})
       }
       req.decoded = decoded;
       next();
@@ -45,35 +47,37 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
 
     try{
     
-       const mobileCategoriesCollection = client.db('mobilePhoneCategory').collection('categorys');
-       const mobileDetailsCollection = client.db('mobilePhoneCategory').collection('services');
+      
+      const mobileDetailsCollection = client.db('mobilePhoneCategory').collection('services');
        const orderingsCollection = client.db('mobilePhoneCategory').collection('orderings');
        const usersCollection = client.db('mobilePhoneCategory').collection('users');
 
 
-   //3data
-   app.get('/categorys', async(req,res)=>{
-    const query = {};
-    const cursor = mobileCategoriesCollection.find(query);
-    const categorys = await cursor.toArray();
-    res.send(categorys);
+   
+    //  4 data   
+    app.get('/services',async(req,res)=>{
+      const query = {};
+      const cursor = mobileDetailsCollection.find(query)
+      const services = await cursor.toArray()
+      res.send(services)
+   })
+    
+   //4 data id
+     
+     app.get('/services/:id',async(req,res)=>{
+      const id=req.params.id;
+      const query ={_id: ObjectId(id)};
+      const service = await mobileDetailsCollection.findOne(query);
+      res.send(service)
    })
 
-    //  6data   
-       app.get('/services',async(req,res)=>{
-        // const id=req.params.id;
-        const query = {}
-        const cursor = mobileDetailsCollection.find(query)
-        const brands = await cursor.limit(6).toArray()
-        res.send(brands)
-     })
-    
-     //my product
+
+     //my order product
      app.get('/orderings', verifyJWT, async(req, res) =>{
       const email = req.query.email;
       const decodedEmail = req.decoded.email;
     if(email !== decodedEmail){
-       return res.status(403).send({message: 'access token'});
+       return res.status(403).send({message: 'forbidden access'});
     }
 
       const query = { email: email};
@@ -82,14 +86,16 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
 })
 
 
-      //orderings 
+    
+
+      // orderings 
       app.post('/orderings', async(req, res) =>{
          const ordering = req.body
           console.log(ordering);
           const query = {
             phoneServices: ordering.phoneServices
         }
-        const alreadyOrdered = await orderingsCollection.find(query).toArray();
+        const alreadyOrdered = await orderingsCollection.findOne(query).toArray();
 
       if(alreadyOrdered.length){
         const message = `already ordering on ${ordering.phoneServices}`
@@ -101,20 +107,26 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
 
     app.get('/jwt', async(req,res) =>{
       const email = req.query.email;
-        // console.log(email)
+         console.log(email)
         const query = { email: email};
-        const user = await usersCollection.find(query);
+        const user = await usersCollection.findOne(query);
         
-        if(user){
-          const token = jwt.sign({email}, process.env.ACCESS_TOKEN,{expiresIn: '24h'})
+        if(user && user.email){
+          const token = jwt.sign({email}, process.env.ACCESS_TOKEN, {expiresIn: '2h'})
           return res.send({accessToken: token});
         }
 
 
           console.log(user);
-        res.status(403).send({accessToken: ''});
+        res.status(403).send({accessToken: ''})
     
      })
+
+     app.get('/users',async(req,res) =>{
+      const query = {};
+      const users = await usersCollection.findOne(query).toArray;
+      res.send(users);
+  })
 
 
       app.post('/users',async(req,res) =>{

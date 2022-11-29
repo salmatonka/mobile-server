@@ -1,0 +1,70 @@
+[debug] [2022-11-28T16:43:35.356Z] ----------------------------------------------------------------------
+[debug] [2022-11-28T16:43:35.360Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\Computer Solution\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js init
+[debug] [2022-11-28T16:43:35.361Z] CLI Version:   11.15.0
+[debug] [2022-11-28T16:43:35.361Z] Platform:      win32
+[debug] [2022-11-28T16:43:35.362Z] Node Version:  v16.17.0
+[debug] [2022-11-28T16:43:35.384Z] Time:          Mon Nov 28 2022 22:43:35 GMT+0600 (Bangladesh Standard Time)
+[debug] [2022-11-28T16:43:35.384Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2022-11-28T16:43:35.399Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2022-11-28T16:43:35.400Z] > authorizing via signed-in user (ommes918@gmail.com)
+[info] 
+     ######## #### ########  ######## ########     ###     ######  ########
+     ##        ##  ##     ## ##       ##     ##  ##   ##  ##       ##
+     ######    ##  ########  ######   ########  #########  ######  ######
+     ##        ##  ##    ##  ##       ##     ## ##     ##       ## ##
+     ##       #### ##     ## ######## ########  ##     ##  ######  ########
+
+You're about to initialize a Firebase project in this directory:
+
+  C:\project\mobile-market-server
+
+Before we get started, keep in mind:
+
+  * You are currently outside your home directory
+
+[info] 
+=== Project Setup
+[info] 
+[info] First, let's associate this project directory with a Firebase project.
+[info] You can create multiple project aliases by running firebase use --add, 
+[info] but for now we'll just set up a default project.
+[info] 
+[debug] [2022-11-28T16:44:39.013Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects pageSize=100
+[debug] [2022-11-28T16:44:40.499Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects 200
+[debug] [2022-11-28T16:44:40.500Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects [omitted]
+[debug] [2022-11-28T16:50:49.510Z] ----------------------------------------------------------------------
+[debug] [2022-11-28T16:50:49.514Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\Computer Solution\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js init
+[debug] [2022-11-28T16:50:49.515Z] CLI Version:   11.15.0
+[debug] [2022-11-28T16:50:49.515Z] Platform:      win32
+[debug] [2022-11-28T16:50:49.515Z] Node Version:  v16.17.0
+[debug] [2022-11-28T16:50:49.542Z] Time:          Mon Nov 28 2022 22:50:49 GMT+0600 (Bangladesh Standard Time)
+[debug] [2022-11-28T16:50:49.542Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2022-11-28T16:50:49.558Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2022-11-28T16:50:49.559Z] > authorizing via signed-in user (ommes918@gmail.com)
+[info] 
+     ######## #### ########  ######## ########     ###     ######  ########
+     ##        ##  ##     ## ##       ##     ##  ##   ##  ##       ##
+     ######    ##  ########  ######   ########  #########  ######  ######
+     ##        ##  ##    ##  ##       ##     ## ##     ##       ## ##
+     ##       #### ##     ## ######## ########  ##     ##  ######  ########
+
+You're about to initialize a Firebase project in this directory:
+
+  C:\project\mobile-market-server
+
+Before we get started, keep in mind:
+
+  * You are currently outside your home directory
+
+[info] 
+=== Project Setup
+[info] 
+[info] First, let's associate this project directory with a Firebase project.
+[info] You can create multiple project aliases by running firebase use --add, 
+[info] but for now we'll just set up a default project.
+[info] 
+[debug] [2022-11-28T16:51:04.248Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects pageSize=100
+[debug] [2022-11-28T16:51:05.323Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects 200
+[debug] [2022-11-28T16:51:05.323Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects [omitted]
